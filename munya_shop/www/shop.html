@@ -142,9 +142,27 @@
                             </div>
                             <a href="contact.html" class="nav-item nav-link">Contact</a>
                         </div>
-                        <div class="navbar-nav ml-auto py-0">
-                            <a href="" class="nav-item nav-link">Login</a>
-                            <a href="" class="nav-item nav-link">Register</a>
+                         <div class="navbar-nav ml-auto py-0">
+                            {% if frappe.session.user != "Guest" %}
+ 
+                                <span class="nav-item nav-link d-flex align-items-center">
+                                    <i class="fa fa-user mr-2"></i>
+                                    {{ full_name or frappe.session.user }}
+                                </span>
+
+                                <a href="/?cmd=web_logout" class="nav-item nav-link text-danger">
+                                    Logout
+                                </a>
+
+                            {% else %}
+
+                                <a href="/login" class="nav-item nav-link">
+                                    Login
+                                </a>
+
+                            {% endif %}
+        
+                            <!-- <a href="" class="nav-item nav-link">Register</a> -->
                         </div>
                     </div>
                 </nav>

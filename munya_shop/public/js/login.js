@@ -125,7 +125,7 @@ frappe.ready(function () {
                         this.showSuccess();
 
                         setTimeout(() => {
-                            window.location.href = "/";
+                            window.location.href = "/shop";
                         }, 800);
 
                     } else {

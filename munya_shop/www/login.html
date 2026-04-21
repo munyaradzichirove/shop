@@ -74,7 +74,7 @@
            {% for provider in provider_logins %}
             <div class="social-buttons">
 
-                <a href="{{ provider.auth_url }}{% if '?' in provider.auth_url %}&{% else %}?{% endif %}redirect-to=/main"
+                <a href="{{ provider.auth_url }}{% if '?' in provider.auth_url %}&{% else %}?{% endif %}redirect-to=/"
    class="social-btn btn btn-block btn-default btn-sm btn-login-option btn-{{ provider.name }}">
               
 
@@ -83,7 +83,7 @@
                     {% endif %}
 
                     Login with {{ provider.provider_name }}
-w
+
                 </a>
 
             </div>

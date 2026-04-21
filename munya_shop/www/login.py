@@ -60,7 +60,7 @@ def get_context(context):
 			if frappe.session.data.user_type == "Website User":
 				redirect_to ="/"
 			else:
-				redirect_to = get_default_path() or "/app"
+				redirect_to = get_default_path() or "/"
 
 		if redirect_to != "login":
 			frappe.local.flags.redirect_location = redirect_to

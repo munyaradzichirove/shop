@@ -313,9 +313,13 @@
                             </div>
                             <div class="card-footer d-flex justify-content-between bg-light border">
                                 <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-eye text-primary mr-1"></i>View Detail</a>
-                                <a href="" class="btn btn-sm text-dark p-0"><i class="fas fa-shopping-cart text-primary mr-1"></i>Add To Cart</a>
-                            </div>
-                        </div>
+                                <a h<a href="#"
+                                    class="btn btn-sm text-dark p-0 add-to-cart"
+                                    data-item="{{ i.name }}">
+                                        <i class="fas fa-shopping-cart text-primary mr-1"></i>
+                                        Add To Cart
+                                </a>
+                        </div></div>
                     </div>
                     {% endfor %}
                     
@@ -447,7 +451,25 @@
     <script src="mail/contact.js"></script>
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="/assets/munya_shop/js/main.js"></script>
+    <script src="/assets/munya_shop/js/cart.js"></script>
+
+
+
+	 
+-------------------important load frappe script in template--------------------------->
+	<script>
+		window.frappe = {};
+		frappe.ready_events = [];
+		frappe.ready = function(fn) {
+			frappe.ready_events.push(fn);
+		}
+	</script>
+	{{ include_script('frappe-web.bundle.js') }}
+	
+    <!-- --------------------------------------------- -->
+
+    
 </body>
 
 </html>

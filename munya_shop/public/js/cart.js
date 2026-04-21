@@ -1,24 +1,21 @@
 document.querySelectorAll(".add-to-cart").forEach(btn => {
-    console.log("btn clicked");
-    btn.addEventListener("click", function(e) {
+    btn.addEventListener("click", async function (e) {
         e.preventDefault();
 
-        let item_code = this.getAttribute("data-item");
+        const item_code = this.dataset.item;
 
-        frappe.call({
-            method: "munya_shop.www.cart.add_to_cart",
-            args: {
+        const res = await fetch("/api/method/munya_shop.www.cart.add_to_cart", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
                 item_code: item_code,
                 qty: 1
-            },
-            callback: function(r) {
-                frappe.show_alert({
-                    message: "Added to cart 🛒",
-                    indicator: "green"
-                });
-            }
+            })
         });
+
+        const data = await res.json();
+        console.log("cart response:", data);
     });
 });
-
-

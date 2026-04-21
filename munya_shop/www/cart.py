@@ -2,35 +2,43 @@ import frappe
 
 @frappe.whitelist(allow_guest=True)
 def add_to_cart(item_code, qty=1):
-
     user = frappe.session.user
 
-    # GUEST CART (session-based)
+    price = frappe.db.get_value(
+        "Item Price",
+        {"item_code": item_code, "selling": 1},
+        "price_list_rate"
+    )
+
+    item_name = frappe.db.get_value("Item", item_code, "item_name")
+
+    # guest cart (session)
     if user == "Guest":
         cart = frappe.session.get("cart") or []
 
-        cart.append({
-            "item_code": item_code,
-            "qty": int(qty)
-        })
+        for c in cart:
+            if c["item"] == item_code:
+                c["qty"] += int(qty)
+                break
+        else:
+            cart.append({
+                "item": item_code,
+                "item_name": item_name,
+                "qty": int(qty),
+                "price": price
+            })
 
         frappe.session["cart"] = cart
-        return {"status": "guest_cart", "cart": cart}
+        return {"status": "guest", "cart": cart}
 
-    # LOGGED IN CART (DB-based)
-    item = frappe.get_doc("Item", item_code)
-
-    frappe.get_doc({
+    # logged-in cart
+    doc = frappe.get_doc({
         "doctype": "Cart Item",
         "user": user,
         "item": item_code,
-        "item_name": item.item_name,
+        "item_name": item_name,
         "qty": qty,
-        "price": frappe.db.get_value(
-            "Item Price",
-            {"item_code": item_code, "selling": 1},
-            "price_list_rate"
-        )
+        "price": price
     }).insert()
 
-    return {"status": "db_cart", "message": "added"}
+    return {"status": "db", "id": doc.name}

@@ -458,17 +458,6 @@
 
 
 	 
--------------------important load frappe script in template--------------------------->
-	<script>
-		window.frappe = {};
-		frappe.ready_events = [];
-		frappe.ready = function(fn) {
-			frappe.ready_events.push(fn);
-		}
-	</script>
-	{{ include_script('frappe-web.bundle.js') }}
-	
-    <!-- --------------------------------------------- -->
 
     
 </body>

@@ -6,7 +6,7 @@ document.querySelectorAll(".add-to-cart").forEach(btn => {
         let item_code = this.getAttribute("data-item");
 
         frappe.call({
-            method: "munta_shop.www.cart.add_to_cart",
+            method: "munya_shop.www.cart.add_to_cart",
             args: {
                 item_code: item_code,
                 qty: 1

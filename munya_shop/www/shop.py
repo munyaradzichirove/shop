@@ -4,19 +4,32 @@ import math
 def get_context(context):
 
     # =========================
-    # 1. PAGINATION SETTINGS
+    # 1. GET PARAMS
     # =========================
     page = int(frappe.form_dict.get("page") or 1)
     page_length = 5
+    group = frappe.form_dict.get("group")
 
     # =========================
-    # 2. TOTAL ITEMS (for pagination UI)
+    # 2. BUILD FILTERS
     # =========================
-    total_items = frappe.db.count("Item", {"disabled": 0})
-    total_pages = math.ceil(total_items / page_length)
+    filters = {"disabled": 0}
+
+    if group:
+        filters["item_group"] = group
 
     # =========================
-    # 3. ITEMS (PAGINATED)
+    # 3. TOTAL ITEMS (RESPECT FILTERS)
+    # =========================
+    total_items = frappe.db.count("Item", filters)
+    total_pages = math.ceil(total_items / page_length) if total_items else 1
+
+    # prevent page overflow
+    if page > total_pages:
+        page = total_pages
+
+    # =========================
+    # 4. GET ITEMS (PAGINATED)
     # =========================
     items = frappe.get_all(
         "Item",
@@ -28,14 +41,14 @@ def get_context(context):
             "custom_is_trendy",
             "custom_just_arrived"
         ],
-        filters={"disabled": 0},
+        filters=filters,
         order_by="item_name asc",
         limit_start=(page - 1) * page_length,
         limit_page_length=page_length
     )
 
     # =========================
-    # 4. PRICES
+    # 5. GET PRICES
     # =========================
     prices = frappe.db.sql("""
         SELECT 
@@ -60,7 +73,7 @@ def get_context(context):
         i.custom_price_before = p["custom_price_before"] if p else None
 
     # =========================
-    # 5. ITEM GROUP COUNTS
+    # 6. ITEM GROUP COUNTS (OPTIONAL: GLOBAL)
     # =========================
     item_counts = frappe.db.sql("""
         SELECT item_group, COUNT(*) as item_count
@@ -82,12 +95,13 @@ def get_context(context):
         g.item_count = count_map.get(g.name, 0)
 
     # =========================
-    # 6. CONTEXT
+    # 7. CONTEXT
     # =========================
     context.items = items
     context.item_groups = item_groups
 
     context.current_page = page
     context.total_pages = total_pages
+    context.selected_group = group  # IMPORTANT (for UI highlight)
 
     return context

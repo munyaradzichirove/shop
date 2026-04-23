@@ -3,6 +3,7 @@
     
     // Dropdown on mouse hover
     $(document).ready(function () {
+        console.log("the file has been refreshed");
         function toggleNavbarMethod() {
             if ($(window).width() > 992) {
                 $('.navbar .dropdown').on('mouseover', function () {

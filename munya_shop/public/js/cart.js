@@ -1,36 +1,38 @@
 document.querySelectorAll(".add-to-cart").forEach(btn => {
+    getGuestId()
+
     btn.addEventListener("click", async function (e) {
         e.preventDefault();
-
         const item_code = this.dataset.item;
 
         try {
-            const res = await fetch("/api/method/munya_shop.www.cart.add_to_cart", {
+            res = await fetch("/api/method/munya_shop.www.cart.add_to_cart", {
                 method: "POST",
+                credentials: "include",
                 headers: {
-                    "Content-Type": "application/json",
-                    // "X-Frappe-CSRF-Token": frappe.csrf_token
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     item_code: item_code,
-                    qty: 1
+                    qty: 1,
+                    guest_id: getGuestId()
                 })
             });
 
             const data = await res.json();
 
             if (data.message) {
-                showToast("🛒 Added to cart!");
-            } else {
-                showToast("Added!", "success");
+                showToast("🛒 Added to cart!", "success");
+                // Optional: window.location.reload(); // Refresh to update context
             }
-
         } catch (err) {
             console.error(err);
             showToast("Failed to add item", "error");
         }
     });
 });
+
+ 
 
 function showToast(message, type = "success") {
     const toast = document.createElement("div");
@@ -56,3 +58,15 @@ function showToast(message, type = "success") {
         toast.remove();
     }, 2000);
 }
+function getGuestId() {
+    let id = localStorage.getItem("guest_id");
+
+    if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem("guest_id", id);
+    }
+
+    return id;
+}
+
+

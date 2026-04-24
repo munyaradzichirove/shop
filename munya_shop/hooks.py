@@ -248,3 +248,12 @@ home_page = "shop"
 # ignore_translatable_strings_from = []
 
 # on_login = "munya_shop.www.cart.merge_cart_on_login"
+
+fixtures = [
+    {
+        "doctype": "Custom Field",
+        "filters": [
+            ["dt", "in", ["Item", "Item Group"]]
+        ]
+    }
+]

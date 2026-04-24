@@ -54,12 +54,43 @@ def get_context(context):
         fields=["item", "qty", "price"]
     )
 
-def merge_cart(guest_id):
+
+def merge_cart_on_login(login_manager):
+    print("on login hit")
     user = frappe.session.user
 
-    guest_items = frappe.get_all("Cart Item", filters={"cart_owner": guest_id})
+    # get guest_id from request cookies or params
+    guest_id = frappe.form_dict.get("guest_id")
 
-    for item in guest_items:
-        doc = frappe.get_doc("Cart Item", item.name)
-        doc.cart_owner = user
-        doc.save()
+    if not guest_id:
+        return
+
+    guest_items = frappe.get_all(
+        "Cart Item",
+        filters={"cart_owner": guest_id},
+        fields=["name", "item", "qty"]
+    )
+
+    for g in guest_items:
+        existing = frappe.db.get_value(
+            "Cart Item",
+            {"cart_owner": user, "item": g.item},
+            "name"
+        )
+
+        if existing:
+            doc = frappe.get_doc("Cart Item", existing)
+            doc.qty += g.qty
+            doc.flags.ignore_permissions = True
+            doc.save()
+        else:
+            doc = frappe.get_doc({
+                "doctype": "Cart Item",
+                "cart_owner": user,
+                "item": g.item,
+                "qty": g.qty
+            })
+            doc.flags.ignore_permissions = True
+            doc.insert()
+
+        frappe.delete_doc("Cart Item", g.name, ignore_permissions=True)

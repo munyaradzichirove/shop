@@ -42,14 +42,32 @@ frappe.ready(function () {
                     : '#8792a2';
             });
         }
+        async  mergeCartAfterLogin() {
+            const guest_id = localStorage.getItem("guest_id");
+            if (!guest_id) return;
 
-        // setupSocialButtons() {
-        //     this.socialButtons.forEach(button => {
-        //         button.addEventListener('click', () => {
-        //             console.log(`Social login: ${button.textContent.trim()}`);
-        //         });
-        //     });
-        // }
+            // 🔥 confirm user is logged in
+            if (!frappe.session.user || frappe.session.user === "Guest") {
+                console.log("User not logged in yet");
+                return;
+            }
+
+            const res = await fetch("/api/method/munya_shop.api.merge_cart", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Frappe-CSRF-Token": frappe.csrf_token
+                },
+                body: JSON.stringify({ guest_id })
+            });
+
+            const data = await res.json();
+            console.log("MERGE RESULT:", data);
+
+            localStorage.removeItem("guest_id");
+        }
+
 
         validateEmail() {
             const email = this.emailInput.value.trim();
@@ -120,14 +138,13 @@ frappe.ready(function () {
                     console.log("LOGIN RESPONSE:", r);
 
                     if (r.message && r.message.status === "Success") {
-                        console.log("LOGIN RESPONSE:", r);
-
                         this.showSuccess();
 
-                        setTimeout(() => {
+                        // 🔥 WAIT a bit for session to be ready
+                        setTimeout(async () => {
+                            await this.mergeCartAfterLogin();
                             window.location.href = "/shop";
-                        }, 800);
-
+                        }, 500);
                     } else {
                         this.showError(
                             'password',
@@ -143,6 +160,7 @@ frappe.ready(function () {
                 }
             });
         }
+        
 
         setLoading(state) {
             this.submitButton.classList.toggle('loading', state);

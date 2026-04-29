@@ -16,6 +16,7 @@
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="/assets/munya_shop/css/core-style.css">
+    <link rel="stylesheet" href="/assets/munya_shop/css/style.css">
 
 </head>
 
@@ -43,7 +44,17 @@
     <!-- ##### Main Content Wrapper Start ##### -->
     <div class="main-content-wrapper d-flex clearfix">
 
-
+        <!-- Mobile Nav (max width 767px)-->
+        <div class="mobile-nav">
+            <!-- Navbar Brand -->
+            <div class="amado-navbar-brand">
+                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+            </div>
+            <!-- Navbar Toggler -->
+            <div class="amado-navbar-toggler">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
 
         <!-- Header Area Start -->
         <header class="header-area clearfix">
@@ -96,14 +107,14 @@
                 <!--  Catagories  -->
                 <div class="catagories-menu">
                     <ul>
-    {% for g in item_groups %}
-    <li class="{% if g.name == selected_group %}active{% endif %}">
-        <a href="?group={{ g.name }}&page=1">
-            {{ g.name }}
-        </a>
-    </li>
-    {% endfor %}
-</ul>
+                        {% for g in item_groups %}
+                        <li class="{% if g.name == selected_group %}active{% endif %}">
+                            <a href="?group={{ g.name }}&page=1">
+                                {{ g.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
                 </div>
             </div>
 
@@ -319,6 +330,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="/assets/munya_shop/js/plugins.js"></script>
     <!-- Active js -->
     <script src="/assets/munya_shop/js/active.js"></script>
+              
 
 </body>
 

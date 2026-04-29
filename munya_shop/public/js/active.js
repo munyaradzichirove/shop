@@ -1,4 +1,5 @@
 (function ($) {
+    console.log("main");
     'use strict';
 
     var $window = $(window);

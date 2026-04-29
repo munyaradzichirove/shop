@@ -173,7 +173,7 @@
                             </div>
 
                             <!-- Add to Cart Form -->
-                            <form class="cart clearfix" method="post">
+                          <form class="cart clearfix" data-item-code="{{ item.name }}">
                                 <div class="cart-btn d-flex mb-50">
                                     <p>Qty</p>
                                     <div class="quantity">
@@ -182,7 +182,11 @@
                                         <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
-                                <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
+                               <button type="submit"
+                                        class="btn amado-btn"
+                                        data-item-code="{{ item.name }}">
+                                    Add to cart
+                                </button>
                             </form>
 
                         </div>
@@ -273,6 +277,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
     
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+ 
     <script src="/assets/munya_shop/js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
     <script src="/assets/munya_shop/js/popper.min.js"></script>
@@ -283,6 +288,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- Active js -->
     <script src="/assets/munya_shop/js/active.js"></script>
     <script src="/assets/munya_shop/js/cart.js"></script>
+    <script src="/assets/munya_shop/js/main.js"></script>
               
 
 

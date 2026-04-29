@@ -7,7 +7,22 @@ def get_identity(guest_id):
     return guest_id
 
 @frappe.whitelist(allow_guest=True)
+def get_cart_count(guest_id=None):
+    user = frappe.session.user if frappe.session.user != "Guest" else guest_id
+
+    if not user:
+        return {"cart_count": 0}
+
+    count = frappe.db.count("Cart Item", {
+        "cart_owner": user
+    })
+
+    return {"cart_count": count}
+
+    
+@frappe.whitelist(allow_guest=True)
 def add_to_cart(item_code, qty=1, guest_id=None):
+    print("adding item---------")
     identity = get_identity(guest_id)
 
     existing = frappe.db.get_value(
@@ -51,7 +66,7 @@ def get_context(context):
     context.cart = frappe.get_all(
         "Cart Item",
         filters={"cart_owner": identity},
-        fields=["item", "qty", "price"]
+        fields=["item", "qty", "rate"]
     )
 
 

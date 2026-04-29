@@ -193,16 +193,22 @@
                                    <a href="/product?item={{ i.name }}">
                                         <h6>{{i.name}}</h6>
                                     </a>
-                               
- 
+                            
                                 </div>
                                 <!-- Ratings & Cart -->
-                                <div class="ratings-cart text-right">
-                                    <div class="cart">
-                                        <a href="cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img src="/assets/munya_shop/img/core-img/cart.png" alt=""></a>
-                                    </div>
+                             <div class="ratings-cart text-right">
+                                <div class="cart">
+                                    <a class="tests"
+                                    href="#"
+                                    data-item="{{ i.name }}"
+                                    data-toggle="tooltip"
+                                    data-placement="left"
+                                    title="Add to Cart">
+                                        <img src="/assets/munya_shop/img/core-img/cart.png" alt="">
+                                    </a>
                                 </div>
                             </div>
+                             </div>
                         </div>
                     </div>
 
@@ -330,6 +336,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
         </div>
     </footer>
     <!-- ##### Footer Area End ##### -->
+     <script src="/assets/munya_shop/js/main.js"></script>
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
     <script src="/assets/munya_shop/js/jquery/jquery-2.2.4.min.js"></script>
@@ -341,6 +348,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="/assets/munya_shop/js/plugins.js"></script>
     <!-- Active js -->
     <script src="/assets/munya_shop/js/active.js"></script>
+
+    <script src="/assets/munya_shop/js/cart.js"></script>
               
 
 </body>

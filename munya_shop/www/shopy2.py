@@ -22,7 +22,7 @@ def get_context(context):
     # 4. DATA FETCHING
     items = frappe.get_all(
         "Item",
-        fields=["name", "item_name", "item_group", "image", "custom_is_trendy", "custom_just_arrived"],
+        fields=["name", "item_name", "item_group", "image", "custom_is_trendy", "custom_just_arrived","custom_image_2"],
         filters=filters,
         order_by="item_name asc",
         limit_start=(page - 1) * page_length,

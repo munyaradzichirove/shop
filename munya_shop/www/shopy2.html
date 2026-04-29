@@ -172,7 +172,11 @@
                             <div class="product-img">
                                 <img src="{{i.image}}" alt="">
                                 <!-- Hover Thumb -->
-                                <img class="hover-img" src="img/product-img/product2.jpg" alt="">
+                                {% if i.custom_image_2 %}
+                                    <img class="hover-img" src="{{ i.custom_image_2 }}" alt="">
+                                {% else %}
+                                    <img class="hover-img" src="{{ i.custom_image_2 }}" alt="">
+                                {% endif %}
                             </div>
 
                             <!-- Product Description -->

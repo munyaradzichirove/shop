@@ -106,14 +106,21 @@
                 <!--  Catagories  -->
                 <div class="catagories-menu">
                     <ul>
-                        {% for g in item_groups %}
-                        <li class="{% if g.name == selected_group %}active{% endif %}">
-                            <a href="?group={{ g.name }}&page=1">
-                                {{ g.name }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                    </ul>
+
+    <!-- ALL -->
+    <li class="{% if not selected_group %}active{% endif %}">
+        <a href="?page=1">All</a>
+    </li>
+
+    {% for g in item_groups %}
+    <li class="{% if g.name == selected_group %}active{% endif %}">
+        <a href="?group={{ g.name | urlencode }}&page=1">
+            {{ g.item_group_name }}
+        </a>
+    </li>
+    {% endfor %}
+
+</ul>
                 </div>
             </div>
 

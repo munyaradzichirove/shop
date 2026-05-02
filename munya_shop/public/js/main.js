@@ -1,9 +1,20 @@
+function setCookie(name, value, days = 365) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + value + expires + "; path=/";
+}
+
 function getGuestId() {
     let id = localStorage.getItem("guest_id");
 
     if (!id) {
         id = crypto.randomUUID();
         localStorage.setItem("guest_id", id);
+        setCookie("guest_id", id); // 🔥 key fix
     }
 
     return id;
@@ -15,24 +26,24 @@ function callApi(method, args, callback, errCallback) {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
-            "X-Frappe-CSRF-Token": window.csrf_token || ""
+            "X-Frappe-CSRF-Token": window.frappe_boot?.csrf_token || ""
         },
         credentials: "include",
         body: JSON.stringify(args),
     })
-        .then(async (res) => {
-            const data = await res.json().catch(() => null);
+    .then(async (res) => {
+        const data = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw data || new Error("API error");
-            }
+        if (!res.ok) {
+            throw data || new Error("API error");
+        }
 
-            callback && callback(data.message);
-        })
-        .catch((err) => {
-            console.error("API error:", method, err);
-            errCallback && errCallback(err);
-        });
+        callback && callback(data.message);
+    })
+    .catch((err) => {
+        console.error("API error:", method, err);
+        errCallback && errCallback(err);
+    });
 }
 function updateCartBadge(count) {
     const el = document.querySelector(".cart-nav span");
@@ -69,21 +80,16 @@ document.addEventListener("submit", function (e) {
 
     e.preventDefault();
 
-    console.log("inproduct cart");
-
     const itemCode = form.dataset.itemCode;
+    const price = form.dataset.price;
     const qty = parseInt(form.querySelector("[name='quantity']").value || 1);
-
-    if (!itemCode) {
-        console.log("Missing item code");
-        return;
-    }
 
     callApi(
         "munya_shop.www.cart.add_to_cart",
         {
             item_code: itemCode,
             qty: qty,
+            price: price,
             guest_id: getGuestId()
         },
         function (data) {

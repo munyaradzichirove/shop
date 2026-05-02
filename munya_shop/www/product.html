@@ -83,8 +83,6 @@
             <!-- Cart Menu -->
             <div class="cart-fav-search mb-100">
                 <a href="cart.html" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
-                <a href="#" class="fav-nav"><img src="img/core-img/favorites.png" alt=""> Favourite</a>
-                <a href="#" class="search-nav"><img src="img/core-img/search.png" alt=""> Search</a>
             </div>
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
@@ -147,7 +145,9 @@
                             <!-- Product Meta Data -->
                             <div class="product-meta-data">
                                 <div class="line"></div>
-                                <p class="product-price">${{price.price_list_rate}}</p>
+                               <p class="product-price">
+                                    ${{ price.price_list_rate if price and price.price_list_rate else 0 }}
+                                </p>
                                 <a href="product-details.html">
                                     <h6>{{item.name}}</h6>
                                 </a>
@@ -173,21 +173,40 @@
                             </div>
 
                             <!-- Add to Cart Form -->
-                          <form class="cart clearfix" data-item-code="{{ item.name }}">
-                                <div class="cart-btn d-flex mb-50">
-                                    <p>Qty</p>
-                                    <div class="quantity">
-                                        <span class="qty-minus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty ) &amp;&amp; qty &gt; 1 ) effect.value--;return false;"><i class="fa fa-caret-down" aria-hidden="true"></i></span>
-                                        <input type="number" class="qty-text" id="qty" step="1" min="1" max="300" name="quantity" value="1">
-                                        <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
-                                    </div>
+                        <form class="cart clearfix"
+                            data-item-code="{{ item.name }}"
+                            data-price="{{ price.price_list_rate }}"
+                            onsubmit="return false;">
+
+                            <div class="cart-btn d-flex mb-50">
+                                <p>Qty</p>
+
+                                <div class="quantity">
+                                    <span class="qty-minus" onclick="changeQty(-1, this)">
+                                        <i class="fa fa-caret-down" aria-hidden="true"></i>
+                                    </span>
+
+                                    <input type="number"
+                                        class="qty-text"
+                                        step="1"
+                                        min="1"
+                                        max="300"
+                                        name="quantity"
+                                        value="1">
+
+                                    <span class="qty-plus" onclick="changeQty(1, this)">
+                                        <i class="fa fa-caret-up" aria-hidden="true"></i>
+                                    </span>
                                 </div>
-                               <button type="submit"
-                                        class="btn amado-btn"
-                                        data-item-code="{{ item.name }}">
-                                    Add to cart
-                                </button>
-                            </form>
+                            </div>
+
+                            <button type="submit"
+                                    class="btn amado-btn"
+                                    data-item-code="{{ item.name }}">
+                                Add to cart
+                            </button>
+
+                        </form>
 
                         </div>
                     </div>
@@ -206,7 +225,8 @@
                 <div class="col-12 col-lg-6 col-xl-7">
                     <div class="newsletter-text mb-100">
                         <h2>Subscribe for a <span>25% Discount</span></h2>
-                        <p>Nulla ac convallis lorem, eget euismod nisl. Donec in libero sit amet mi vulputate consectetur. Donec auctor interdum purus, ac finibus massa bibendum nec.</p>
+                        <p>Subscribe now and enjoy 25% off your first order.
+Be the first to hear about exclusive deals, new arrivals, and special offers.</p>
                     </div>
                 </div>
                 <!-- Newsletter Form -->
@@ -255,9 +275,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                                         <li class="nav-item">
                                             <a class="nav-link" href="shop.html">Shop</a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="product-details.html">Product</a>
-                                        </li>
+                                       
                                         <li class="nav-item">
                                             <a class="nav-link" href="cart.html">Cart</a>
                                         </li>
@@ -277,6 +295,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
     
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+    <script>
+        window.frappe_boot = {
+            csrf_token: "{{ frappe.session.csrf_token }}",
+            user: "{{ frappe.session.user }}"
+        };
+
+        console.log("CSRF:", window.frappe_boot.csrf_token);
+        console.log("User:", window.frappe_boot.user);
+    </script>
+
  
     <script src="/assets/munya_shop/js/jquery/jquery-2.2.4.min.js"></script>
     <!-- Popper js -->
@@ -287,8 +315,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <script src="/assets/munya_shop/js/plugins.js"></script>
     <!-- Active js -->
     <script src="/assets/munya_shop/js/active.js"></script>
-    <script src="/assets/munya_shop/js/cart.js"></script>
     <script src="/assets/munya_shop/js/main.js"></script>
+
               
 
 

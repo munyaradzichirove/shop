@@ -22,31 +22,33 @@ $(document).ready(function () {
     // API wrapper (FIXED)
     // ------------------------------------------------------------------
    function callApi(method, args, callback, errCallback) {
-    console.log("main cart--33-------");
+    console.log("main cart call");
+    console.log("CSRF:", window.frappe_boot?.csrf_token);
+
     fetch("/api/method/" + method, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
+            "X-Frappe-CSRF-Token": window.frappe_boot?.csrf_token || ""
         },
-        credentials: "include", // 🔥 important for Frappe session cookies
+        credentials: "include", // keeps session alive
         body: JSON.stringify(args),
     })
-        .then(async (res) => {
-            const data = await res.json().catch(() => null);
+    .then(async (res) => {
+        const data = await res.json().catch(() => null);
 
-            if (!res.ok) {
-                throw data || new Error("API error");
-            }
+        if (!res.ok) {
+            throw data || new Error("API error");
+        }
 
-            let msg = data.message || data;
-            callback && callback(msg);
-        })
-        .catch((err) => {
-            console.error("API error:", method, err);
-            errCallback && errCallback(err);
-        });
+        const msg = data.message ?? data;
+        callback && callback(msg);
+    })
+    .catch((err) => {
+        console.error("API error:", method, err);
+        errCallback && errCallback(err);
+    });
 }
-
     // ------------------------------------------------------------------
     // UI helpers
     // ------------------------------------------------------------------

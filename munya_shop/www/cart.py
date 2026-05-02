@@ -1,10 +1,13 @@
 import frappe
 
 
-def get_identity(guest_id):
-    if frappe.session.user != "Guest":
-        return frappe.session.user
-    return guest_id
+def get_identity():
+    user = frappe.session.user
+
+    if user != "Guest":
+        return user
+
+    return frappe.request.cookies.get("guest_id")
 
 @frappe.whitelist(allow_guest=True)
 def get_cart_count(guest_id=None):
@@ -23,7 +26,7 @@ def get_cart_count(guest_id=None):
 @frappe.whitelist(allow_guest=True)
 def add_to_cart(item_code, qty=1, guest_id=None):
     print("adding item---------")
-    identity = get_identity(guest_id)
+    identity = get_identity()
 
     existing = frappe.db.get_value(
         "Cart Item",
@@ -61,13 +64,14 @@ def add_to_cart(item_code, qty=1, guest_id=None):
     }
 def get_context(context):
     guest_id = frappe.form_dict.get("guest_id")
-    identity = get_identity(guest_id)
+    identity = get_identity()
+    print(f"identity is {identity}")
 
     context.cart = frappe.get_all(
         "Cart Item",
         filters={"cart_owner": identity},
-        fields=["item", "qty", "rate"]
-    )
+        fields=["item", "qty", "rate", "image"]
+    ) or []
 
 
 def merge_cart_on_login(login_manager):

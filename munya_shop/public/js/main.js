@@ -12,13 +12,24 @@ function getGuestId() {
     let id = localStorage.getItem("guest_id");
 
     if (!id) {
-        id = crypto.randomUUID();
+        // 🔥 FIX: Check if crypto.randomUUID exists, otherwise use fallback
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+            id = crypto.randomUUID();
+        } else {
+            // Manual UUID generator for non-HTTPS/Localhost environments
+            id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+        }
+        
         localStorage.setItem("guest_id", id);
-        setCookie("guest_id", id); // 🔥 key fix
+        setCookie("guest_id", id); 
     }
 
     return id;
 }
+
 function callApi(method, args, callback, errCallback) {
     console.log("main cart request");
 
@@ -45,6 +56,8 @@ function callApi(method, args, callback, errCallback) {
         errCallback && errCallback(err);
     });
 }
+
+// ... rest of your UI functions (updateCartBadge, showToast, etc.)
 function updateCartBadge(count) {
     const el = document.querySelector(".cart-nav span");
     if (el) el.textContent = "(" + (count || 0) + ")";

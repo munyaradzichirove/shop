@@ -8,4 +8,4 @@ class CartItem(Document):
         self.rate = flt(self.rate)
         
         # Recalculate total amount
-        self.amount = self.qty * self.rate
+        self.amount = self.qty * self.rate 

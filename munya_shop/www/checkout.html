@@ -17,10 +17,50 @@
     <link rel="stylesheet" href="/assets/munya_shop/css/core-style.css">
     <link rel="stylesheet" href="/assets/munya_shop/css/style.css">
 
+    <!-- CSS in <head> -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 
 </head>
 
 <body>
+    <style>
+        /* 1. Make the dropdown list scrollable */
+.nice-select .list {
+    max-height: 250px !important;
+    overflow-y: auto !important;
+    width: 100% !important;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+/* 2. Match the Amado input style (Height & Background) */
+.nice-select {
+    height: 60px !important;
+    line-height: 60px !important;
+    background-color: #f5f7fa !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding-left: 30px !important;
+    font-size: 14px;
+    color: #6b6b6b;
+}
+
+/* 3. Fix the alignment of the text inside the options */
+.nice-select .option {
+    line-height: 40px !important;
+    min-height: 40px !important;
+    padding-left: 30px !important;
+}
+
+/* 4. Amado Yellow Highlight on hover */
+.nice-select .option:hover, 
+.nice-select .option.focus, 
+.nice-select .option.selected.focus {
+    background-color: #fbb710 !important;
+    color: #fff !important;
+}
+        
+    </style>
     <!-- Search Wrapper Area Start -->
     <div class="search-wrapper section-padding-100">
         <div class="search-close">
@@ -120,16 +160,11 @@
                                         <input type="email" class="form-control" id="email" placeholder="Email" value="">
                                     </div>
                                     <div class="col-12 mb-3">
-                                        <select class="w-100" id="country">
-                                        <option value="usa">United States</option>
-                                        <option value="uk">United Kingdom</option>
-                                        <option value="ger">Germany</option>
-                                        <option value="fra">France</option>
-                                        <option value="ind">India</option>
-                                        <option value="aus">Australia</option>
-                                        <option value="bra">Brazil</option>
-                                        <option value="cana">Canada</option>
+                                        
+                                    <select class="w-100" id="country" name="country">
+                                        <option value="" disabled selected>Select Country</option>
                                     </select>
+                                                                    
                                     </div>
                                     <div class="col-12 mb-3">
                                         <input type="text" class="form-control mb-3" id="street_address" placeholder="Address" value="">
@@ -230,10 +265,11 @@
                         <div class="footer-logo mr-50">
                             <a href="index.html"><img src="img/core-img/logo2.png" alt=""></a>
                         </div>
+                       <p>
                         <!-- Copywrite Text -->
-                        <p class="copywrite"><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a> & Re-distributed by <a href="https://themewagon.com/" target="_blank">Themewagon</a>
-<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
+                      Copyright &copy;<script>document.write(new Date().getFullYear());</script> VerityCore Consultancy (Pvt) Ltd All Rights Reserved.</i>
+<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
+</p>
                     </div>
                 </div>
                 <!-- Single Widget Area -->
@@ -269,10 +305,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     </footer>
     <!-- ##### Footer Area End ##### -->
 
-     <script src="/assets/munya_shop/js/main.js"></script>
+
+
+     <!-- <script src="/assets/munya_shop/js/main.js"></script> -->
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
     <script src="/assets/munya_shop/js/jquery/jquery-2.2.4.min.js"></script>
+        <!-- JS at bottom of body (after jQuery) -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+
     <!-- Popper js -->
     <script src="/assets/munya_shop/js/popper.min.js"></script>
     <!-- Bootstrap js -->
@@ -282,7 +324,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
     <!-- Active js -->
     <script src="/assets/munya_shop/js/active.js"></script>
 
-    <script src="/assets/munya_shop/js/cart.js"></script>
+    <!-- <script src="/assets/munya_shop/js/cart.js"></script> -->
+
+     <script src="/assets/munya_shop/js/countries.js"></script>
 </body>
 
 </html>

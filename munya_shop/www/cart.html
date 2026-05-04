@@ -126,29 +126,23 @@
                                     <td class="price">
                                         $<span class="item-price">{{ item.rate }}</span>
                                     </td>
-                                    <td class="qty">
-                                        <div class="qty-btn d-flex">
-                                            <p>Qty</p>
-                                            <div class="quantity">
-                                                <span class="qty-minus" 
-                                                    onclick="changeQty(-1, this); updateCartDB(this);">
-                                                    <i class="fa fa-minus" aria-hidden="true"></i>
-                                                </span>
+                                  <td class="qty">
+                                    <div class="qty-btn d-flex">
+                                        <p>Qty</p>
+                                        <div class="quantity">
+                                            <!-- REMOVED onclick: the JS listener handles this now -->
+                                            <span class="qty-minus">
+                                                <i class="fa fa-minus" aria-hidden="true"></i>
+                                            </span>
 
-                                                <input type="number"
-                                                    class="qty-text"
-                                                    step="1" min="1" max="300"
-                                                    name="quantity"
-                                                    value="{{ item.qty or 1 }}"
-                                                    onchange="updateCartDB(this)">
+                                            <input type="number" class="qty-text" step="1" min="1" max="300" name="quantity" value="{{ item.qty or 1 }}"readonly>
 
-                                                <span class="qty-plus" 
-                                                    onclick="changeQty(1, this); updateCartDB(this);">
-                                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                                </span>
-                                            </div>
+                                            <span class="qty-plus">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </span>
                                         </div>
-                                    </td>
+                                    </div>
+                                </td>
                                 </tr>
                                 {% endfor %} {# Loop ends here #}
                             {% else %} {# If cart is empty #}

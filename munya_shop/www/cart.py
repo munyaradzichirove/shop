@@ -1,5 +1,5 @@
 import frappe
-
+from frappe.utils import flt, cint
 
 def get_identity():
     user = frappe.session.user
@@ -22,11 +22,15 @@ def get_cart_count(guest_id=None):
 
     return {"cart_count": count}
 
-    
 @frappe.whitelist(allow_guest=True)
 def add_to_cart(item_code, qty=1, guest_id=None):
-    print("adding item---------")
+    print(f"adding item-now-----{item_code}---")
     identity = get_identity()
+        # Fetch price
+    selling_price = frappe.db.get_value("Item Price", 
+        {"item_code": item_code, "price_list": "Standard Selling"}, 
+        "price_list_rate") 
+    print(f"selling price {selling_price}")
 
     existing = frappe.db.get_value(
         "Cart Item",
@@ -46,15 +50,20 @@ def add_to_cart(item_code, qty=1, guest_id=None):
             "qty": doc.qty
         }
 
+
+
+    # Create the doc
     doc = frappe.get_doc({
         "doctype": "Cart Item",
         "cart_owner": identity,
         "item": item_code,
-        "qty": int(qty)
+        "qty": int(qty),
+        "rate": flt(selling_price),
     })
 
+    # Set flags BEFORE inserting
     doc.flags.ignore_permissions = True
-    doc.insert()
+    doc.insert() # <--- ONLY ONE INSERT
 
     return {
         "status": "created",

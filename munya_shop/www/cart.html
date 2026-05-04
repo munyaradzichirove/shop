@@ -260,15 +260,16 @@ Be the first to hear about exclusive deals, new arrivals, and special offers.</p
         </div>
     </footer>
     <!-- ##### Footer Area End ##### -->
-     <script>
-            window.frappe_boot = {
-                csrf_token: "{{ frappe.session.csrf_token }}",
-                user: "{{ frappe.session.user }}"
-            };
+   <script>
+        window.frappe_boot = {
+            csrf_token: "{{ frappe.session.csrf_token }}",
+            user: "{{ frappe.session.user }}"
+        };
 
-            console.log("CSRF:", window.frappe_boot.csrf_token);
-            console.log("User:", window.frappe_boot.user);
+        console.log("CSRF  now:", window.frappe_boot.csrf_token);
+        console.log("User:", window.frappe_boot.user);
     </script>
+
 
 
     <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->

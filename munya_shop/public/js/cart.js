@@ -22,9 +22,6 @@ $(document).ready(function () {
     // API wrapper (FIXED)
     // ------------------------------------------------------------------
    function callApi(method, args, callback, errCallback) {
-    console.log("main cart call");
-    console.log("CSRF:", window.frappe_boot?.csrf_token);
-
     fetch("/api/method/" + method, {
         method: "POST",
         headers: {
@@ -84,9 +81,6 @@ $(document).ready(function () {
 
         setTimeout(() => t.fadeOut(300, () => t.remove()), 2500);
     }
-
-
-
 
     // ------------------------------------------------------------------
     // 1. ADD TO CART

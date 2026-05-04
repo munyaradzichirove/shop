@@ -21,15 +21,20 @@ def get_cart_count(guest_id=None):
     })
 
     return {"cart_count": count}
-
 @frappe.whitelist(allow_guest=True)
-def add_to_cart(item_code, qty=1, guest_id=None):
+def add_to_cart(item_code, qty=1, guest_id=None, is_set_qty=False): # Added is_set_qty here
     print(f"adding item-now-----{item_code}---")
+    
+    # Use frappe.utils helpers for safe conversion
+    from frappe.utils import cint, flt 
+    
     identity = get_identity()
-        # Fetch price
+    
+    # Fetch price
     selling_price = frappe.db.get_value("Item Price", 
         {"item_code": item_code, "price_list": "Standard Selling"}, 
         "price_list_rate") 
+    
     print(f"selling price {selling_price}")
 
     existing = frappe.db.get_value(
@@ -40,9 +45,14 @@ def add_to_cart(item_code, qty=1, guest_id=None):
 
     if existing:
         doc = frappe.get_doc("Cart Item", existing)
-        doc.qty += int(qty)
-        doc.flags.ignore_permissions = True
-        doc.save()
+        
+        # Now is_set_qty is defined and will work!
+        if str(is_set_qty).lower() in ["true", "1"]: 
+            doc.qty = cint(qty) # Direct override (Cart Page)
+        else:
+            doc.qty += cint(qty) # Increment (Shop Page)
+            
+        doc.save(ignore_permissions=True)
 
         return {
             "status": "updated",
@@ -50,20 +60,17 @@ def add_to_cart(item_code, qty=1, guest_id=None):
             "qty": doc.qty
         }
 
-
-
-    # Create the doc
+    # Create the doc if it doesn't exist
     doc = frappe.get_doc({
         "doctype": "Cart Item",
         "cart_owner": identity,
         "item": item_code,
-        "qty": int(qty),
+        "qty": cint(qty),
         "rate": flt(selling_price),
     })
 
-    # Set flags BEFORE inserting
     doc.flags.ignore_permissions = True
-    doc.insert() # <--- ONLY ONE INSERT
+    doc.insert()
 
     return {
         "status": "created",

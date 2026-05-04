@@ -176,3 +176,42 @@ document.addEventListener("click", function (e) {
     });
 
 });
+
+
+// 1. Recalculate totals based on row data
+function refreshCartTotals() {
+    let subtotal = 0;
+    
+    document.querySelectorAll('.cart-item-row').forEach(row => {
+        const price = parseFloat(row.querySelector('.item-price').textContent) || 0;
+        const qty = parseInt(row.querySelector('.qty-text').value) || 0;
+        subtotal += (price * qty);
+    });
+
+    const totalStr = `$${subtotal.toFixed(2)}`;
+    
+    // Target the Summary IDs
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const totalEl = document.getElementById('cart-total');
+    
+    if(subtotalEl) subtotalEl.textContent = totalStr;
+    if(totalEl) totalEl.textContent = totalStr;
+}
+
+// 2. Push change to Frappe
+function updateCartDB(element) {
+    const row = element.closest('.cart-item-row');
+    const itemCode = row.dataset.itemCode;
+    const qty = row.querySelector('.qty-text').value;
+
+    callApi("munya_shop.www.cart.add_to_cart", {
+        item_code: itemCode,
+        qty: qty,
+        is_set_qty: true // Custom flag for your Python to use doc.qty = qty
+    }, function(data) {
+        refreshCartTotals(); 
+    });
+}
+
+// 3. Run on page load
+document.addEventListener("DOMContentLoaded", refreshCartTotals);

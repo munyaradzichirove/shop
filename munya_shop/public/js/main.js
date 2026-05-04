@@ -29,7 +29,25 @@ function getGuestId() {
 
     return id;
 }
-
+function changeQty(amount, element) {
+    // 1. Find the parent quantity div
+    const container = element.closest('.quantity');
+    // 2. Find the input inside that specific container
+    const input = container.querySelector('input[name="quantity"]');
+    
+    if (input) {
+        let currentVal = parseInt(input.value) || 1;
+        let newVal = currentVal + amount;
+        
+        // 3. Keep it within min/max bounds
+        const min = parseInt(input.getAttribute('min')) || 1;
+        const max = parseInt(input.getAttribute('max')) || 300;
+        
+        if (newVal >= min && newVal <= max) {
+            input.value = newVal;
+        }
+    }
+}
 function callApi(method, args, callback, errCallback) {
     console.log("main cart request");
 
@@ -91,7 +109,7 @@ document.addEventListener("submit", function (e) {
 
     if (!form.classList.contains("cart")) return;
 
-    e.preventDefault();
+    // e.preventDefault();
 
     const itemCode = form.dataset.itemCode;
     const price = form.dataset.price;

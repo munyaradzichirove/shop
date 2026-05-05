@@ -104,16 +104,15 @@
             </div>
             <!-- Logo -->
             <div class="logo">
-                <a href="index.html"><img src="img/core-img/logo.png" alt=""></a>
+                <a href="/"><img src="img/core-img/logo.png" alt=""></a>
             </div>
             <!-- Amado Nav -->
             <nav class="amado-nav">
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="shop.html">Shop</a></li>
-                    <li><a href="product-details.html">Product</a></li>
-                    <li><a href="cart.html">Cart</a></li>
-                    <li class="active"><a href="checkout.html">Checkout</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/shop">Shop</a></li>
+                    <li><a href="/cart">Cart</a></li>
+                    <li class="active"><a href="#">Checkout</a></li>
                 </ul>
             </nav>
             <!-- Button Group -->
@@ -122,9 +121,38 @@
                 <a href="#" class="btn amado-btn active">New this week</a>
             </div>
             <!-- Cart Menu -->
-            <div class="cart-fav-search mb-100">
-                    <a href="cart.html" class="cart-nav"><img src="/assets/munya_shop/img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
+           <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<div class="cart-fav-search mb-100">
+    {% if frappe.session.user and frappe.session.user != "Guest" %}
+        <div class="user-menu">
+            <div class="user-trigger">
+                <span class="material-icons-outlined">account_circle</span>
+                <span class="user-name">
+                    {{ frappe.session.user.split("@")[0] | capitalize }}
+                </span>
+                <span class="material-icons-outlined arrow-icon">expand_more</span>
             </div>
+
+            <div class="user-dropdown">
+                <!-- <a href="/profile" class="dropdown-item">
+                    <span class="material-icons-outlined">person</span> Profile
+                </a>
+                <a href="/orders" class="dropdown-item">
+                    <span class="material-icons-outlined">shopping_bag</span> Orders
+                </a>
+                <div class="divider"></div> -->
+                <a href="/?cmd=logout" class="dropdown-item logout" style="color: red;"> Logout
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <a href="/login" class="user-trigger login-link">
+            <span class="material-icons-outlined">login</span>
+            <span class="user-name">Login</span>
+        </a>
+    {% endif %}
+</div>
+     
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
                 <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>

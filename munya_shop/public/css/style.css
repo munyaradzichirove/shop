@@ -1,0 +1,120 @@
+/* 1. Shared Button Style */
+.user-trigger {
+    /* Layout */
+    display: inline-flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: center !important;
+    white-space: nowrap;
+    
+    /* THE LOCK: Fixed dimensions so they are identical */
+    width: 140px;             /* Set this to your preferred width */
+    height: 44px;            /* Set this to your preferred height */
+    padding: 0 !important;   /* Padding is 0 because we are using fixed W/H */
+    gap: 8px; 
+
+    /* Aesthetics */
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none !important;
+    
+    transition: all 0.2s ease;
+    user-select: none;
+}
+
+.user-trigger:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+/* 2. Text & Icon (Unified) */
+.user-trigger .material-icons-outlined {
+    color: #64748b;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.user-name {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: #1e293b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    /* Ensure long names don't break the box */
+    max-width: 80px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 3. The Dropdown (Aligned to the button) */
+.user-menu {
+    position: relative;
+    display: inline-block;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 140px;            /* Matches the button width exactly */
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    padding: 6px;
+    z-index: 1000;
+    margin-top: 8px;
+
+    /* Hidden State */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translateY(5px);
+    transition: all 0.2s ease;
+}
+
+/* Bridge to prevent hover flickering */
+.user-dropdown::before {
+    content: "";
+    position: absolute;
+    top: -12px;
+    left: 0;
+    width: 100%;
+    height: 12px;
+    background: transparent;
+}
+
+.user-menu:hover .user-dropdown {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: translateY(0);
+}
+
+/* 4. Dropdown Items */
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: #475569;
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+.dropdown-item:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+.divider {
+    height: 1px;
+    background: #f1f5f9;
+    margin: 4px 6px;
+}

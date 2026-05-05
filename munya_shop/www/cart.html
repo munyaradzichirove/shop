@@ -16,7 +16,7 @@
 
     <!-- Core Style CSS -->
     <link rel="stylesheet" href="/assets/munya_shop/css/core-style.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/assets/munya_shop/css/style.css">
 
 </head>
 
@@ -55,7 +55,7 @@
                 <span></span><span></span><span></span>
             </div>
         </div>
-
+     
         <!-- Header Area Start -->
         <header class="header-area clearfix">
             <!-- Close Icon -->
@@ -80,10 +80,37 @@
                 <a href="#" class="btn amado-btn mb-15">%Discount%</a>
                 <a href="#" class="btn amado-btn active">New this week</a>
             </div>
-            <!-- Cart Menu -->
-            <div class="cart-fav-search mb-100">
-                <a href="cart.html" class="cart-nav"><img src="img/core-img/cart.png" alt=""> Cart <span>(0)</span></a>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+<div class="cart-fav-search mb-100">
+    {% if frappe.session.user and frappe.session.user != "Guest" %}
+        <div class="user-menu">
+            <div class="user-trigger">
+                <span class="material-icons-outlined">account_circle</span>
+                <span class="user-name">
+                    {{ frappe.session.user.split("@")[0] | capitalize }}
+                </span>
+                <span class="material-icons-outlined arrow-icon">expand_more</span>
             </div>
+
+            <div class="user-dropdown">
+                <!-- <a href="/profile" class="dropdown-item">
+                    <span class="material-icons-outlined">person</span> Profile
+                </a>
+                <a href="/orders" class="dropdown-item">
+                    <span class="material-icons-outlined">shopping_bag</span> Orders
+                </a>
+                <div class="divider"></div> -->
+                <a href="/?cmd=logout" class="dropdown-item logout" style="color: red;"> Logout
+                </a>
+            </div>
+        </div>
+    {% else %}
+        <a href="/login" class="user-trigger login-link">
+            <span class="material-icons-outlined">login</span>
+            <span class="user-name">Login</span>
+        </a>
+    {% endif %}
+</div>
             <!-- Social Button -->
             <div class="social-info d-flex justify-content-between">
                 <a href="#"><i class="fa fa-pinterest" aria-hidden="true"></i></a>
@@ -146,12 +173,8 @@
                                 </tr>
                                 {% endfor %} {# Loop ends here #}
                             {% else %} {# If cart is empty #}
-                                <tr>
-                                    <td colspan="4" style="text-align: center; padding: 40px;">
-                                        <p>Your cart is empty.</p>
-                                        <a href="/shop" class="btn amado-btn">Go to Shop</a>
-                                    </td>
-                                </tr>
+                              <p>Your cart is empty.</p>
+                                
                             {% endif %} {# If block ends here #}
                         </tbody>
                             </table>

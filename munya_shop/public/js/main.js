@@ -129,3 +129,35 @@ document.addEventListener("submit", function (e) {
         }
     );
 });
+
+
+// ... keep your other functions (setCookie, getGuestId, etc.) above ...
+
+/**
+ * EXPOSED LOGOUT FUNCTION
+ * Attached to window so the HTML 'onclick' can find it.
+ */
+window.logout = async function(e) {
+    if (e && e.preventDefault) {
+        e.preventDefault(); // stop page jump
+    }
+
+    try {
+        // Optional: show a loading indicator if frappe is available
+        if (window.frappe && frappe.dom) {
+            frappe.dom.freeze('Logging out...');
+        }
+
+        // Using your specific API method
+        await frappe.call({
+            method: "munya_shop.www.logout.logout_user"
+        });
+    } catch (err) {
+        console.error("Logout failed", err);
+    } finally {
+        // Redirect to login regardless of success/fail to clear UI state
+        window.location.href = "/login";
+    }
+};
+
+// ... keep your cart event listeners below ...

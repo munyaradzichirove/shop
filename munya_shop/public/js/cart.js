@@ -1,10 +1,10 @@
 /* ==========================================================================
-   cart.js – handles cart UI + add-to-cart
+   cart.js – handles cart UI + add-to-cart + user sessions
    ========================================================================== */
 
 $(document).ready(function () {
 
-    // 1. API Wrapper
+    // 1. API Wrapper (Handles CSRF and Fetch)
     function callApi(method, args, callback, errCallback) {
         fetch("/api/method/" + method, {
             method: "POST",
@@ -27,7 +27,28 @@ $(document).ready(function () {
         });
     }
 
-    // 2. UI Helpers
+    // 2. EXPOSED LOGOUT FUNCTION
+    // Attached to window inside ready block so it can use callApi
+    window.logout = function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        
+        console.log("Attempting logout via callApi...");
+
+        callApi(
+            "munya_shop.www.logout.logout_user", 
+            {}, 
+            function(response) {
+                console.log("Logout successful");
+                window.location.href = "/login";
+            },
+            function(err) {
+                console.error("Logout failed", err);
+                window.location.href = "/login";
+            }
+        );
+    };
+
+    // 3. UI Helpers
     function updateCartBadge(count) {
         $(".cart-nav span").text("(" + (count || 0) + ")");
     }
@@ -46,12 +67,21 @@ $(document).ready(function () {
     function showToast(msg, type = "success") {
         var color = type === "error" ? "#e74c3c" : "#2ecc71";
         var t = $('<div class="cart-toast">' + msg + "</div>");
-        t.css({ position: "fixed", bottom: "30px", right: "30px", background: color, color: "#fff", padding: "10px 20px", borderRadius: "5px", zIndex: 9999 });
+        t.css({ 
+            position: "fixed", 
+            bottom: "30px", 
+            right: "30px", 
+            background: color, 
+            color: "#fff", 
+            padding: "10px 20px", 
+            borderRadius: "5px", 
+            zIndex: 9999 
+        });
         $("body").append(t);
         setTimeout(() => t.fadeOut(300, () => t.remove()), 2500);
     }
 
-    // 3. Shop Page: Add to Cart button logic
+    // 4. Shop Page: Add to Cart button logic
     $(document).on("click", ".tests", function (e) {
         e.preventDefault();
         const itemCode = $(this).attr("data-item");
@@ -66,7 +96,7 @@ $(document).ready(function () {
         });
     });
 
-    // 4. Cart Page: Quantity Change logic
+    // 5. Cart Page: Quantity Change logic
     $(document).on("click", ".qty-minus, .qty-plus", function () {
         var $row = $(this).closest("tr");
         var itemCode = $row.data("item-code");
@@ -91,13 +121,11 @@ $(document).ready(function () {
             is_set_qty: true 
         }, function (data) {
             updateCartBadge(data.cart_count);
-            refreshCartTotals(); // Recalculate sidebar totals
+            refreshCartTotals(); 
         });
     }
 
-    // 5. Initial Load
+    // 6. Initial Load
     refreshCartTotals();
-    callApi("munya_shop.www.cart.get_cart_count", {}, function (data) {
-        updateCartBadge(data.cart_count);
-    });
+
 });
